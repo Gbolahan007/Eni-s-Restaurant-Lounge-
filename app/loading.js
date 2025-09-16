@@ -4,24 +4,24 @@ import React from "react";
 
 const Loading = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 flex items-center justify-center">
+    <div className="min-h-screen bg-black flex items-center justify-center">
       <div className="relative">
         {/* Main Loading Container */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-white/50">
+        <div className="bg-black/80 backdrop-blur-sm rounded-3xl p-12 shadow-2xl border border-gray-800">
           <div className="flex flex-col items-center space-y-8">
             {/* Animated Logo/Icon */}
             <div className="relative">
               {/* Outer rotating ring */}
-              <div className="w-24 h-24 rounded-full border-4 border-amber-200 animate-spin">
-                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-600 border-r-orange-600 animate-spin"></div>
+              <div className="w-24 h-24 rounded-full border-4 border-[#844628]/30 animate-spin">
+                <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-[#673d2b] border-r-[#844628] animate-spin"></div>
               </div>
 
               {/* Inner pulsing circle */}
-              <div className="absolute inset-4 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full animate-pulse flex items-center justify-center">
-                <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+              <div className="absolute inset-4 bg-gradient-to-br from-[#673d2b] to-[#844628] rounded-full animate-pulse flex items-center justify-center">
+                <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
                   {/* Restaurant/Food Icon */}
                   <svg
-                    className="w-5 h-5 text-amber-600"
+                    className="w-5 h-5 text-[#e0c9c0]"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -37,55 +37,55 @@ const Loading = () => {
 
             {/* Loading Text */}
             <div className="text-center space-y-3">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-[#673d2b] to-[#844628] bg-clip-text text-transparent">
                 Preparing Your Experience
               </h2>
-              <p className="text-gray-600 text-lg">
+              <p className="text-gray-300 text-lg">
                 Getting everything ready for you...
               </p>
             </div>
 
             {/* Animated Progress Dots */}
             <div className="flex space-x-2">
-              <div className="w-3 h-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-bounce"></div>
+              <div className="w-3 h-3 bg-gradient-to-r from-[#673d2b] to-[#844628] rounded-full animate-bounce"></div>
               <div
-                className="w-3 h-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-bounce"
+                className="w-3 h-3 bg-gradient-to-r from-[#673d2b] to-[#844628] rounded-full animate-bounce"
                 style={{ animationDelay: "0.1s" }}
               ></div>
               <div
-                className="w-3 h-3 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-bounce"
+                className="w-3 h-3 bg-gradient-to-r from-[#673d2b] to-[#844628] rounded-full animate-bounce"
                 style={{ animationDelay: "0.2s" }}
               ></div>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-64 h-2 bg-amber-100 rounded-full overflow-hidden">
-              <div className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full animate-pulse"></div>
+            <div className="w-64 h-2 bg-gray-800 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-[#673d2b] to-[#844628] rounded-full animate-pulse"></div>
             </div>
           </div>
         </div>
 
         {/* Floating Elements */}
-        <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-400 rounded-full opacity-60 animate-ping"></div>
+        <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-br from-[#673d2b] to-[#844628] rounded-full opacity-60 animate-ping"></div>
         <div
-          className="absolute -bottom-2 -right-2 w-6 h-6 bg-gradient-to-br from-orange-400 to-red-400 rounded-full opacity-40 animate-ping"
+          className="absolute -bottom-2 -right-2 w-6 h-6 bg-gradient-to-br from-[#844628] to-[#673d2b] rounded-full opacity-40 animate-ping"
           style={{ animationDelay: "0.5s" }}
         ></div>
         <div
-          className="absolute top-1/2 -right-6 w-4 h-4 bg-gradient-to-br from-amber-300 to-orange-300 rounded-full opacity-50 animate-ping"
+          className="absolute top-1/2 -right-6 w-4 h-4 bg-gradient-to-br from-[#673d2b] to-[#844628] rounded-full opacity-50 animate-ping"
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
 
       {/* Background Decoration */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-amber-200/20 to-orange-200/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-gradient-to-br from-[#673d2b]/20 to-[#844628]/20 rounded-full blur-3xl animate-pulse"></div>
         <div
-          className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-gradient-to-br from-orange-200/20 to-red-200/20 rounded-full blur-3xl animate-pulse"
+          className="absolute bottom-1/4 right-1/4 w-40 h-40 bg-gradient-to-br from-[#844628]/20 to-[#673d2b]/20 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "2s" }}
         ></div>
         <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-amber-100/10 to-orange-100/10 rounded-full blur-3xl animate-pulse"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-[#673d2b]/10 to-[#844628]/10 rounded-full blur-3xl animate-pulse"
           style={{ animationDelay: "1s" }}
         ></div>
       </div>
