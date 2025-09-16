@@ -135,6 +135,7 @@ const Menu = () => {
         {/* Subcategory Banner */}
         {activeSubCategory?.imageUrl && (
           <div className="relative mb-16 rounded-3xl overflow-hidden shadow-2xl">
+            {/* Image */}
             <div className="relative w-full h-64 md:h-80 lg:h-96">
               <Image
                 src={activeSubCategory.imageUrl}
@@ -143,10 +144,14 @@ const Menu = () => {
                 className="object-cover"
               />
             </div>
-            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-              <h2 className="text-4xl md:text-5xl font-bold text-white uppercase">
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+
+            <div className="absolute bottom-6 left-6">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase drop-shadow-lg">
                 {activeSubCategory.name}
               </h2>
+              <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mt-2"></div>
             </div>
           </div>
         )}
