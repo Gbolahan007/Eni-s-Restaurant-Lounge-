@@ -1,101 +1,155 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { ShoppingBag, User, MapPin } from "lucide-react";
 import Image from "next/image";
+import { Oswald } from "next/font/google";
+import Menu from "./components/Menu";
 
-export default function Home() {
+const oswald = Oswald({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"],
+});
+
+const Home = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    {
+      image: "/food-1.jpg",
+      title: "ENI'S LOUNGE",
+      description:
+        "Spend 5000 naira or more and get a FREE 5 pc. Mashed Potato Poppers!",
+    },
+    {
+      image: "/food-2.jpg",
+      title: "CRISPY CHICKEN DEAL",
+      description: "Get our signature crispy chicken with special seasoning!",
+    },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const handleMapClick = () => {
+    window.open(
+      "https://www.google.com/maps/search/?api=1&query=37+Ajose+Street,+Mende,+Maryland",
+      "_blank"
+    );
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className={`${oswald.className} min-h-screen bg-white`}>
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo */}
+            <div className="flex items-center">
+              <Image
+                src="/logo.png"
+                alt="Eni's Restaurant Logo"
+                width={120}
+                height={40}
+                priority
+                className="filter-none drop-shadow-2xl brightness-0 invert"
+              />
+            </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            {/* Navigation */}
+            <nav className="hidden md:flex space-x-8">
+              <a
+                href="#"
+                className="text-[#673d2b] font-semibold border-b-2 border-[#673d2b] pb-1"
+              >
+                Menu
+              </a>
+            </nav>
+
+            {/* Right side icons */}
+            <div className="flex items-center space-x-4">
+              <button className="p-2 text-gray-700 hover:text-[#673d2b] transition-colors">
+                <User size={24} />
+              </button>
+              <button className="p-2 text-gray-700 hover:text-[#673d2b] transition-colors relative">
+                <ShoppingBag size={24} />
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#673d2b] rounded-full flex items-center justify-center">
+                  <span className="text-xs text-white font-bold">0</span>
+                </div>
+              </button>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </header>
+
+      {/* Black banner */}
+      <div className="bg-gray-900 text-white py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div
+            onClick={handleMapClick}
+            className="flex items-center justify-center space-x-2 cursor-pointer"
+          >
+            <MapPin size={20} className="text-[#673d2b]" />
+            <button className="text-white hover:text-[#673d2b] transition-colors">
+              37, Ajose street, Mende, Maryland
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Content Carousel Section */}
+      <section className="bg-[#f8f7f5] py-8 sm:py-16 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row items-center justify-between">
+            {/* Text Content */}
+            <div className="max-w-2xl text-center lg:text-left">
+              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+                {slides[currentSlide].title}
+              </h1>
+
+              <p className="text-sm sm:text-base md:text-lg text-gray-700 mb-6 sm:mb-8">
+                {slides[currentSlide].description}
+              </p>
+
+              <button className="bg-[#844628] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold transition-colors">
+                Check our Menu
+              </button>
+            </div>
+
+            {/* Food image */}
+            <div className="relative w-full sm:w-80 h-52 sm:h-72 mt-6 lg:mt-0">
+              <Image
+                src={slides[currentSlide].image}
+                alt={slides[currentSlide].title}
+                fill
+                className="object-cover rounded-lg"
+              />
+            </div>
+          </div>
+
+          {/* Slide indicators */}
+          <div className="flex justify-center mt-6 space-x-2">
+            {slides.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  index === currentSlide ? "bg-[#673d2b]" : "bg-gray-400"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Menu />
     </div>
   );
-}
+};
+
+export default Home;
