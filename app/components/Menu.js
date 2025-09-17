@@ -6,6 +6,7 @@ import { useCategories } from "../_lib/Queries/useCategories";
 import { useMenuItems } from "../_lib/Queries/useMenuItems";
 import { useSubCategories } from "../_lib/Queries/useSubCategories";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Menu = () => {
   const { categories } = useCategories();
@@ -53,13 +54,25 @@ const Menu = () => {
         }}
       >
         <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-16 text-center">
+        <motion.div
+          className="relative max-w-7xl mx-auto px-4 py-16 text-center"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >
           <h1 className="text-5xl font-bold mb-4">Our Delicious Menu</h1>
-          <p className="text-xl text-gray-200 max-w-2xl mx-auto">
+          <motion.p
+            className="text-xl text-gray-200 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
             Discover our carefully crafted dishes made with the finest
             ingredients and authentic flavors that will tantalize your taste
             buds.
-          </p>
+          </motion.p>
           <div className="absolute bottom-0 left-0 right-0">
             <svg
               className="w-full h-12 fill-current text-black"
@@ -68,9 +81,10 @@ const Menu = () => {
               <path d="M0,32L48,37.3C96,43,192,53,288,48C384,43,480,21,576,21.3C672,21,768,43,864,48C960,53,1056,43,1152,37.3C1248,32,1344,32,1392,32L1440,32L1440,48L1392,48C1344,48,1248,48,1152,48C1056,48,960,48,864,48C768,48,672,48,576,48C480,48,384,48,288,48C192,48,96,48,48,48L0,48Z" />
             </svg>
           </div>
-        </div>
+        </motion.div>
       </div>
 
+      {/* Content */}
       <div
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23111111' fill-opacity='0.3'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z'/%3E%3C/g%3E%3C/svg%3E")`,
@@ -78,14 +92,31 @@ const Menu = () => {
         }}
         className="max-w-7xl mx-auto px-4 py-12"
       >
-        {/* CATEGORY NAVIGATION */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12 ">
+        {/* Category Navigation */}
+        <motion.div
+          className="flex flex-wrap justify-center gap-4 mb-12"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: {
+              opacity: 1,
+              y: 0,
+              transition: { staggerChildren: 0.1 },
+            },
+          }}
+        >
           {categories?.map((cat) => (
-            <button
+            <motion.button
               key={cat.id}
               onClick={() => {
                 setActiveTab(cat.id);
                 setActiveFilter("All");
+              }}
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0 },
               }}
               className={`px-6 py-3 uppercase rounded-full border-2 text-sm font-semibold transition-all duration-300 ${
                 activeTab === cat.id
@@ -94,99 +125,142 @@ const Menu = () => {
               }`}
             >
               {cat.name}
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
-        {/* SUBCATEGORY NAVIGATION */}
-        {activeTab && filteredSubCategories?.length > 0 && (
-          <div className="mb-12">
-            <h3 className="text-2xl font-semibold text-center text-gray-200 mb-6">
-              Filter by Type
-            </h3>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button
-                onClick={() => setActiveFilter("All")}
-                className={`px-6 py-3 rounded-full border-2 text-sm font-semibold transition-all duration-300 ${
-                  activeFilter === "All"
-                    ? "bg-[#673d2b] text-white border-[#673d2b]"
-                    : "bg-black/60 text-gray-300 border-gray-600"
-                }`}
-              >
-                All
-              </button>
-              {filteredSubCategories.map((sub) => (
-                <button
-                  key={sub.id}
-                  onClick={() => setActiveFilter(sub.name)}
-                  className={`px-6 py-3 rounded-full border-2 text-sm font-semibold transition-all duration-300 uppercase ${
-                    activeFilter === sub.name
+        {/* Subcategory Navigation */}
+        <AnimatePresence>
+          {activeTab && filteredSubCategories?.length > 0 && (
+            <motion.div
+              className="mb-12"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-2xl font-semibold text-center text-gray-200 mb-6">
+                Filter by Type
+              </h3>
+              <div className="flex flex-wrap gap-4 justify-center">
+                <motion.button
+                  onClick={() => setActiveFilter("All")}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-6 py-3 rounded-full border-2 text-sm font-semibold transition-all duration-300 ${
+                    activeFilter === "All"
                       ? "bg-[#673d2b] text-white border-[#673d2b]"
                       : "bg-black/60 text-gray-300 border-gray-600"
                   }`}
                 >
-                  {sub.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+                  All
+                </motion.button>
+                {filteredSubCategories.map((sub) => (
+                  <motion.button
+                    key={sub.id}
+                    onClick={() => setActiveFilter(sub.name)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`px-6 py-3 rounded-full border-2 text-sm font-semibold transition-all duration-300 uppercase ${
+                      activeFilter === sub.name
+                        ? "bg-[#673d2b] text-white border-[#673d2b]"
+                        : "bg-black/60 text-gray-300 border-gray-600"
+                    }`}
+                  >
+                    {sub.name}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Subcategory Banner */}
-        {activeSubCategory?.imageUrl && (
-          <div className="relative mb-16 rounded-3xl overflow-hidden shadow-2xl">
-            {/* Image */}
-            <div className="relative w-full h-64 md:h-80 lg:h-96">
-              <Image
-                src={activeSubCategory.imageUrl}
-                alt={activeSubCategory.name}
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-
-            <div className="absolute bottom-6 left-6">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase drop-shadow-lg">
-                {activeSubCategory.name}
-              </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mt-2"></div>
-            </div>
-          </div>
-        )}
+        <AnimatePresence>
+          {activeSubCategory?.imageUrl && (
+            <motion.div
+              className="relative mb-16 rounded-3xl overflow-hidden shadow-2xl"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="relative w-full h-64 md:h-80 lg:h-96">
+                <Image
+                  src={activeSubCategory.imageUrl}
+                  alt={activeSubCategory.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-6 left-6">
+                <h2 className="text-3xl md:text-4xl font-extrabold text-white uppercase drop-shadow-lg">
+                  {activeSubCategory.name}
+                </h2>
+                <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-orange-500 mt-2"></div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Menu Items */}
-        <div className="max-w-5xl mx-auto">
+        <motion.div
+          className="max-w-5xl mx-auto"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+        >
           {filteredItems.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2">
               {filteredItems.map((item) => (
-                <Link key={item.id} href={`/menu/${item.slug}`}>
-                  <div className="group bg-black/70 border-2 border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50 cursor-pointer">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[#673d2b]">
-                      {item.name}
-                    </h3>
-                    <p className="text-gray-300 text-sm md:text-base line-clamp-2">
-                      {item.description}
-                    </p>
-                    <div className="mt-4 text-2xl font-bold text-[#673d2b]">
-                      ₦{item.price.toLocaleString()}
+                <motion.div
+                  key={item.id}
+                  variants={{
+                    hidden: { opacity: 0, y: 40 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                >
+                  <Link href={`/menu/${item.slug}`}>
+                    <div className="group bg-black/70 border-2 border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50 cursor-pointer">
+                      <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[#673d2b]">
+                        {item.name}
+                      </h3>
+                      <p className="text-gray-300 text-sm md:text-base line-clamp-2">
+                        {item.description}
+                      </p>
+                      <div className="mt-4 text-2xl font-bold text-[#673d2b]">
+                        ₦{item.price.toLocaleString()}
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </motion.div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-20">
+            <motion.div
+              className="text-center py-20"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
               <h3 className="text-2xl font-bold text-white mb-2">
                 No Items Found
               </h3>
               <p className="text-gray-300">
                 We couldn&apos;t find any items in this category.
               </p>
-            </div>
+            </motion.div>
           )}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
