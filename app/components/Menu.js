@@ -160,19 +160,20 @@ const Menu = () => {
           {filteredItems.length > 0 ? (
             <div className="grid gap-8 md:grid-cols-2">
               {filteredItems.map((item) => (
-                <Link key={item.id} href={`/menu/${item.slug}`}>
-                  <div className="group bg-black/70 border-2 border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50 cursor-pointer">
-                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[#673d2b]">
-                      {item.name}
-                    </h3>
-                    <p className="text-gray-300 text-sm md:text-base line-clamp-2">
-                      {item.description}
-                    </p>
-                    <div className="mt-4 text-2xl font-bold text-[#673d2b]">
-                      ₦{item.price.toLocaleString()}
-                    </div>
+                <div
+                  key={item.id}
+                  className="group bg-black/70 border-2 border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50"
+                >
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[#673d2b]">
+                    {item.name}
+                  </h3>
+                  <p className="text-gray-300 text-sm md:text-base line-clamp-2">
+                    {item.description}
+                  </p>
+                  <div className="mt-4 text-2xl font-bold text-[#673d2b]">
+                    ₦{item.price.toLocaleString()}
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           ) : (
