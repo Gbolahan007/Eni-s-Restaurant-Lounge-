@@ -1,48 +1,44 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { ShoppingBag, User, MapPin } from "lucide-react";
+import { Suspense } from "react";
 import Image from "next/image";
 import { Oswald } from "next/font/google";
-import Menu from "./components/Menu";
+import {
+  getCategories,
+  getSubCategories,
+  getMenuItems,
+} from "./_lib/data-server";
+import { ShoppingBag, User, MapPin } from "lucide-react";
+import HeroSlideshow from "./components/HeroSlideShow";
+import StaticMenu from "./components/Menu";
 
 const oswald = Oswald({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
 });
 
-const Home = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+async function fetchMenuData() {
+  try {
+    const [categories, subCategories, menuItems] = await Promise.all([
+      getCategories(),
+      getSubCategories(),
+      getMenuItems(),
+    ]);
+    return {
+      categories,
+      subCategories,
+      menuItems,
+    };
+  } catch (error) {
+    console.error("Failed to fetch menu data:", error);
+    return {
+      categories: [],
+      subCategories: [],
+      menuItems: [],
+    };
+  }
+}
 
-  const slides = [
-    {
-      image: "/img.jpg",
-      title: "ENI'S RESTAURANT & LOUNGE",
-      description:
-        "Juicy Barbecue Chicken glazed with our signature smoky-sweet BBQ sauce!",
-    },
-    {
-      image: "/img-1.jpg",
-      title: "JOLLOF COMBO DEAL",
-      description:
-        "Enjoy our rich, flavorful Jollof Combo served with the perfect sides!",
-    },
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
-
-    return () => clearInterval(interval);
-  }, [slides.length]);
-
-  const handleMapClick = () => {
-    window.open(
-      "https://www.google.com/maps/search/?api=1&query=37+Ajose+Street,+Mende,+Maryland",
-      "_blank"
-    );
-  };
+export default async function Home() {
+  const initialMenuData = await fetchMenuData();
 
   return (
     <div
@@ -100,74 +96,62 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Black banner */}
-      <div className="bg-gray-900 text-white py-3">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div
-            onClick={handleMapClick}
-            className="flex items-center justify-center space-x-2 cursor-pointer"
-          >
-            <MapPin size={20} className="text-[#673d2b]" />
-            <button className="text-white hover:text-[#673d2b] transition-colors">
-              37, Ajose street, Mende, Maryland
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Black banner with location */}
+      <LocationBanner />
 
-      <section
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23111111' fill-opacity='0.3'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z'/%3E%3C/g%3E%3C/svg%3E")`,
-          backgroundColor: "#0a0a0a",
-        }}
-        className="bg-black py-8 sm:py-16 relative"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row items-center justify-between">
-            {/* Text Content */}
-            <div className="max-w-2xl text-center lg:text-left">
-              <h1 className="text-xl sm:text-3xl md:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                {slides[currentSlide].title}
-              </h1>
+      {/* Hero section with slideshow */}
+      <HeroSlideshow />
 
-              <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8">
-                {slides[currentSlide].description}
-              </p>
-
-              <button className="bg-[#673d2b] text-white px-6 sm:px-8 py-2 sm:py-3 rounded-full text-sm sm:text-lg font-semibold hover:bg-[#844628] transition-colors">
-                Check our Menu
-              </button>
-            </div>
-
-            {/* Food image */}
-            <div className="relative w-full sm:w-80 h-52 sm:h-72 mt-6 lg:mt-0">
-              <Image
-                src={slides[currentSlide].image}
-                alt={slides[currentSlide].title}
-                fill
-                className="object-cover rounded-lg"
-              />
-            </div>
-          </div>
-
-          {/* Slide indicators */}
-          <div className="flex justify-center mt-6 space-x-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  index === currentSlide ? "bg-[#673d2b]" : "bg-gray-600"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Menu />
+      <Suspense fallback={<MenuSkeleton />}>
+        <StaticMenu initialData={initialMenuData} />
+      </Suspense>
     </div>
   );
-};
+}
 
-export default Home;
+function LocationBanner() {
+  return (
+    <div className="bg-gray-900 text-white py-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-center space-x-2">
+          <MapPin size={20} className="text-[#673d2b]" />
+          <a
+            href="https://www.google.com/maps/search/?api=1&query=37+Ajose+Street,+Mende,+Maryland"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:text-[#673d2b] transition-colors"
+          >
+            37, Ajose street, Mende, Maryland
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Loading skeleton
+function MenuSkeleton() {
+  return (
+    <div className="max-w-7xl mx-auto px-4 py-12">
+      <div className="flex flex-wrap justify-center gap-4 mb-12">
+        {[1, 2, 3, 4].map((i) => (
+          <div
+            key={i}
+            className="w-24 h-10 bg-gray-800 rounded-full animate-pulse"
+          />
+        ))}
+      </div>
+      <div className="grid gap-8 md:grid-cols-2 max-w-5xl mx-auto">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="bg-gray-800 rounded-3xl p-6 animate-pulse">
+            <div className="h-6 bg-gray-700 rounded mb-2" />
+            <div className="h-4 bg-gray-700 rounded mb-4" />
+            <div className="h-8 bg-gray-700 rounded w-24" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export const revalidate = 3600; // 1 hour

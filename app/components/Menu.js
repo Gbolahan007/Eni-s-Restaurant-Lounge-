@@ -1,27 +1,43 @@
 "use client";
 
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCategories } from "../_lib/Queries/useCategories";
-import { useMenuItems } from "../_lib/Queries/useMenuItems";
 import { useSubCategories } from "../_lib/Queries/useSubCategories";
+import { useMenuItems } from "../_lib/Queries/useMenuItems";
 import Image from "next/image";
 
-const Menu = () => {
-  const { categories } = useCategories();
-  const { subCategories } = useSubCategories();
-  const { menuItems: items } = useMenuItems();
+const StaticMenu = ({ initialData }) => {
   const [activeTab, setActiveTab] = useState(null);
   const [activeFilter, setActiveFilter] = useState("All");
+  const queryClient = useQueryClient();
+
+  // Pre-populate React Query cache with initial data
+  useEffect(() => {
+    if (initialData) {
+      queryClient.setQueryData(["categories"], initialData.categories);
+      queryClient.setQueryData(["subCategories"], initialData.subCategories);
+      queryClient.setQueryData(["menuitems"], initialData.menuItems);
+    }
+  }, [initialData, queryClient]);
+
+  const { categories } = useCategories();
+  const { subCategories } = useSubCategories();
+  const { menuItems } = useMenuItems();
+
+  const currentCategories = categories || initialData?.categories || [];
+  const currentSubCategories =
+    subCategories || initialData?.subCategories || [];
+  const currentMenuItems = menuItems || initialData?.menuItems || [];
 
   // Filter subcategories by active category
-  const filteredSubCategories = subCategories?.filter(
+  const filteredSubCategories = currentSubCategories?.filter(
     (sub) => sub.categoryId === activeTab
   );
 
   // Filter menu items by category + subcategory
   const filteredItems =
-    items?.filter((item) => {
+    currentMenuItems?.filter((item) => {
       const matchesCategory = activeTab
         ? filteredSubCategories?.some((sub) => sub.id === item.subCategoryId)
         : true;
@@ -78,8 +94,8 @@ const Menu = () => {
         className="max-w-7xl mx-auto px-4 py-12"
       >
         {/* CATEGORY NAVIGATION */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12 ">
-          {categories?.map((cat) => (
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {currentCategories?.map((cat) => (
             <button
               key={cat.id}
               onClick={() => {
@@ -162,7 +178,7 @@ const Menu = () => {
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="group bg-black/70 border-2  border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50"
+                  className="group bg-black/70 border-2 border-gray-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:border-[#673d2b]/50"
                 >
                   <h3 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[#673d2b]">
                     {item.name}
@@ -192,4 +208,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default StaticMenu;
